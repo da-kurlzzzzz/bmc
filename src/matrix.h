@@ -9,10 +9,18 @@ private:
     std::vector<std::vector<double> > data;
 
     void check_nonempty() const;
-    void check_consistency() const;
+    void check_consistent() const;
+    void check_additive(const TMatrix& rv) const;
+    void check_multiplicative(const TMatrix& rv) const;
+
+    TMatrix sub(int i_sub, int j_sub) const;
+    double minor(int i_sub, int j_sub) const;
+
     friend std::ostream& operator<<(std::ostream& out, const TMatrix& rv);
     friend std::istream& operator>>(std::istream& in, TMatrix& rv);
+
     friend TMatrix pow(const TMatrix& base, int exponent);
+
 public:
     TMatrix(int rows = 1, int cols = -1, int diag_elem = 1);
 
