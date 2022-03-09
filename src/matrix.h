@@ -15,6 +15,7 @@ private:
 
     TMatrix sub(int i_sub, int j_sub) const;
     double minor(int i_sub, int j_sub) const;
+    double cofactor(int i_sub, int j_sub) const;
 
     friend std::ostream& operator<<(std::ostream& out, const TMatrix& rv);
     friend std::istream& operator>>(std::istream& in, TMatrix& rv);
@@ -44,8 +45,8 @@ public:
     bool operator==(const TMatrix& rv) const;
     bool operator!=(const TMatrix& rv) const;
 
-    TMatrix inverted() const;
     TMatrix transposed() const;
+    TMatrix inverted() const;
 
     double det() const;
     double norm() const;

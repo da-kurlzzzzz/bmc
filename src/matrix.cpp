@@ -2,6 +2,7 @@
 
 #include <string>
 #include <sstream>
+#include <cmath>
 
 TMatrix::TMatrix(int rows, int cols, int diag_elem) {
     if (cols == -1) {
@@ -95,6 +96,44 @@ TMatrix& TMatrix::operator/=(double rv) {
     return *this *= (1 / rv);
 }
 
+TMatrix TMatrix::operator*(const TMatrix& rv) const {
+    this->check_multiplicative(rv);
+    TMatrix result(this->height(), rv.width(), 0);
+    for (int i = 0; i < result.height(); ++i) {
+        for (int j = 0; j < result.width(); ++j) {
+            for (int k = 0; k < this->width(); ++k) {
+                result.data.at(i).at(j) += this->data.at(i).at(k) * rv.data.at(k).at(j);
+            }
+        }
+    }
+    return result;
+}
+
+TMatrix& TMatrix::operator*=(const TMatrix& rv) {
+    return *this = *this * rv;
+}
+
+bool TMatrix::operator==(const TMatrix& rv) const {
+    try {
+        this->check_additive(rv);
+    }
+    catch (const std::runtime_error& e) {
+        return false;
+    }
+    for (int i = 0; i < this->height(); ++i) {
+        for (int j = 0; j < this->width(); ++j) {
+            if (this->data.at(i).at(j) != rv.data.at(i).at(j)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool TMatrix::operator!=(const TMatrix& rv) const {
+    return !(*this == rv);
+}
+
 TMatrix TMatrix::sub(int i_sub, int j_sub) const {
     TMatrix result(this->height() - 1, this->width() - 1);
     for (int i = 0; i < result.height(); ++i) {
@@ -111,8 +150,12 @@ double TMatrix::minor(int i_sub, int j_sub) const {
     return this->sub(i_sub, j_sub).det();
 }
 
+double TMatrix::cofactor(int i_sub, int j_sub) const {
+    return this->minor(i_sub, j_sub) * std::pow(-1, i_sub + j_sub);
+}
+
 double TMatrix::det() const {
-    if (this->is_square()) {
+    if (!this->is_square()) {
         throw std::runtime_error("determinant is defined for square matrix only");
     }
     if (this->height() == 1) {
@@ -120,7 +163,7 @@ double TMatrix::det() const {
     }
     double result = 0;
     for (int i = 0; i < this->height(); ++i) {
-        result += this->data.at(0).at(i) * this->minor(0, i); // TODO: add sign
+        result += this->data.at(0).at(i) * this->cofactor(0, i); // TODO: add sign
     }
     return result;
 }
@@ -156,4 +199,8 @@ std::istream& operator>>(std::istream& in, TMatrix& rv) {
     rv.check_nonempty();
     rv.check_consistent();
     return in;
+}
+
+bool TMatrix::is_square() const {
+    return this->height() == this->width();
 }
