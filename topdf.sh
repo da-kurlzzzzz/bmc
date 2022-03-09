@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir -p pdf
+
 for file in src/*
 do
     base=$(basename $file)
