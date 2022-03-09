@@ -12,6 +12,7 @@ TMatrix::TMatrix(int rows, int cols, int diag_elem) {
         this->data.at(i).resize(cols);
         this->data.at(i).at(i) = diag_elem;
     }
+    this->check_nonempty();
 }
 
 int TMatrix::height() const {
