@@ -50,7 +50,7 @@ void TMatrix::check_multiplicative(const TMatrix& rv) const {
     }
 }
 
-TMatrix& TMatrix::operator+=(const TMatrix& rv) {
+TMatrix& TMatrix::operator +=(const TMatrix& rv) {
     this->check_additive(rv);
     for (int i = 0; i < this->height(); ++i) {
         for (int j = 0; j < this->width(); ++j) {
@@ -60,7 +60,7 @@ TMatrix& TMatrix::operator+=(const TMatrix& rv) {
     return *this;
 }
 
-TMatrix& TMatrix::operator*=(double rv) {
+TMatrix& TMatrix::operator *=(double rv) {
     for (auto& row : this->data) {
         for (auto& elem : row) {
             elem *= rv;
@@ -69,34 +69,34 @@ TMatrix& TMatrix::operator*=(double rv) {
     return *this;
 }
 
-TMatrix TMatrix::operator*(double rv) const {
+TMatrix TMatrix::operator *(double rv) const {
     TMatrix result = *this;
     return result *= rv;
 }
 
-TMatrix& TMatrix::operator-=(const TMatrix& rv) {
+TMatrix& TMatrix::operator -=(const TMatrix& rv) {
     return *this += (rv * -1);
 }
 
-TMatrix TMatrix::operator+(const TMatrix& rv) const {
+TMatrix TMatrix::operator +(const TMatrix& rv) const {
     TMatrix result = *this;
     return result += rv;
 }
 
-TMatrix TMatrix::operator-(const TMatrix& rv) const {
+TMatrix TMatrix::operator -(const TMatrix& rv) const {
     TMatrix result = *this;
     return result -= rv;
 }
 
-TMatrix TMatrix::operator/(double rv) const {
+TMatrix TMatrix::operator /(double rv) const {
     return *this * (1 / rv);
 }
 
-TMatrix& TMatrix::operator/=(double rv) {
+TMatrix& TMatrix::operator /=(double rv) {
     return *this *= (1 / rv);
 }
 
-TMatrix TMatrix::operator*(const TMatrix& rv) const {
+TMatrix TMatrix::operator *(const TMatrix& rv) const {
     this->check_multiplicative(rv);
     TMatrix result(this->height(), rv.width(), 0);
     for (int i = 0; i < result.height(); ++i) {
@@ -109,11 +109,11 @@ TMatrix TMatrix::operator*(const TMatrix& rv) const {
     return result;
 }
 
-TMatrix& TMatrix::operator*=(const TMatrix& rv) {
+TMatrix& TMatrix::operator *=(const TMatrix& rv) {
     return *this = *this * rv;
 }
 
-bool TMatrix::operator==(const TMatrix& rv) const {
+bool TMatrix::operator ==(const TMatrix& rv) const {
     try {
         this->check_additive(rv);
     }
@@ -130,7 +130,7 @@ bool TMatrix::operator==(const TMatrix& rv) const {
     return true;
 }
 
-bool TMatrix::operator!=(const TMatrix& rv) const {
+bool TMatrix::operator !=(const TMatrix& rv) const {
     return !(*this == rv);
 }
 
@@ -201,7 +201,7 @@ double TMatrix::norm() const {
     return result;
 }
 
-std::ostream& operator<<(std::ostream& out, const TMatrix& rv) {
+std::ostream& operator <<(std::ostream& out, const TMatrix& rv) {
     for (auto row : rv.data) {
         for (auto elem = row.begin(); elem != row.end(); ++elem) {
             out << *elem;
@@ -214,7 +214,7 @@ std::ostream& operator<<(std::ostream& out, const TMatrix& rv) {
     return out;
 }
 
-std::istream& operator>>(std::istream& in, TMatrix& rv) {
+std::istream& operator >>(std::istream& in, TMatrix& rv) {
     rv.data.clear();
     std::vector<double> row;
     do {
