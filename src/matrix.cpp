@@ -134,6 +134,27 @@ bool TMatrix::operator!=(const TMatrix& rv) const {
     return !(*this == rv);
 }
 
+TMatrix TMatrix::transposed() const {
+    TMatrix result(this->width(), this->height());
+    for (int i = 0; i < result.height(); ++i) {
+        for (int j = 0; j < result.width(); ++j) {
+            result.data.at(i).at(j) = this->data.at(j).at(i);
+        }
+    }
+    return result;
+}
+
+TMatrix TMatrix::inverted() const {
+    TMatrix result(this->height(), this->width());
+    for (int i = 0; i < result.height(); ++i) {
+        for (int j = 0; j < result.width(); ++j) {
+            result.data.at(i).at(j) = this->cofactor(i, j);
+        }
+    }
+    result = result.transposed() / this->det();
+    return result;
+}
+
 TMatrix TMatrix::sub(int i_sub, int j_sub) const {
     TMatrix result(this->height() - 1, this->width() - 1);
     for (int i = 0; i < result.height(); ++i) {
@@ -163,7 +184,19 @@ double TMatrix::det() const {
     }
     double result = 0;
     for (int i = 0; i < this->height(); ++i) {
-        result += this->data.at(0).at(i) * this->cofactor(0, i); // TODO: add sign
+        result += this->data.at(0).at(i) * this->cofactor(0, i);
+    }
+    return result;
+}
+
+double TMatrix::norm() const {
+    double result = 0;
+    for (auto row : this->data) {
+        for (auto elem : row) {
+            if (result < std::abs(elem)) {
+                result = std::abs(elem);
+            }
+        }
     }
     return result;
 }
@@ -203,4 +236,38 @@ std::istream& operator>>(std::istream& in, TMatrix& rv) {
 
 bool TMatrix::is_square() const {
     return this->height() == this->width();
+}
+
+bool TMatrix::is_diagonal() const {
+    return this->is_triangular_upper() && this->is_triangular_lower();
+}
+
+bool TMatrix::is_zero() const {
+    return *this == TMatrix(this->height(), this->width(), 0);
+}
+
+bool TMatrix::is_identity() const {
+    return this->is_square() && *this == TMatrix(this->height(), this->width(), 1);
+}
+
+bool TMatrix::is_symmetric() const {
+    return *this == this->transposed();
+}
+
+bool TMatrix::is_triangular_upper() const {
+    if (!this->is_square()) {
+        return false;
+    }
+    for (int i = 0; i < this->height(); ++i) {
+        for (int j = 0; j < this->width(); ++j) {
+            if (i > j && this->data.at(i).at(j) != 0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool TMatrix::is_triangular_lower() const {
+    return this->transposed().is_triangular_upper();
 }
