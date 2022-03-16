@@ -113,6 +113,30 @@ TMatrix& TMatrix::operator *=(const TMatrix& rv) {
     return *this = *this * rv;
 }
 
+TMatrix TMatrix::operator /(const TMatrix& rv) const {
+    return *this * rv.inverted();
+}
+
+TMatrix& TMatrix::operator /=(const TMatrix& rv) {
+    return *this = *this / rv;
+}
+
+TMatrix pow(const TMatrix& base, int exponent) {
+    if (exponent == 1) {
+        return base;
+    }
+    if (!base.is_square()) {
+        throw std::runtime_error("non-square matrices cannot be raised to integer power");
+    }
+    if (exponent < 0) {
+        return pow(base, -exponent).inverted();
+    }
+    if (exponent == 0) {
+        return TMatrix(base.height(), base.width(), 1);
+    }
+    return base * pow(base, exponent - 1);
+}
+
 bool TMatrix::operator ==(const TMatrix& rv) const {
     try {
         this->check_additive(rv);
