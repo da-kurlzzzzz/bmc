@@ -1,17 +1,20 @@
 #include <iostream>
-#include <cmath>
+#include <string>
 
 #include "matrix.h"
 
+void MainMenu();
+
 int main() {
-    TMatrix a, b;
-    std::cin >> a;
-    b = a;
-    std::cout << b << b.det() << std::endl;
-    std::cout << pow(a, 2);
-    std::cout << std::pow(3, 2) << std::endl;
-    b *= a;
-    std::cout << b;
-    std::cout << (a == b) << std::endl;
+    MainMenu();
     return 0;
+}
+
+void MainMenu() {
+    std::string input;
+    std::getline(std::cin, input);
+    while (input[0] != 'q') {
+        // ...
+        std::getline(std::cin, input);
+    }
 }
