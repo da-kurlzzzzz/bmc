@@ -97,7 +97,38 @@ void TMenu::Execute() {
     this->s = STATE_READ_NAME;
     this->Get();
     auto& lv = this->matrices.at(this->Index());
-    // TODO
+    this->s = STATE_READ_NAME;
+    this->Get();
+    auto& rv = this->matrices.at(this->Index());
+    this->s = STATE_READ_NAME;
+    this->Get();
+    auto& to = this->matrices.at(this->Index());
+    switch (command) {
+    case '+':
+        to = lv + rv;
+        break;
+    case '-':
+        to = lv - rv;
+        break;
+    case '*':
+        to = lv * rv;
+        break;
+    case '/':
+        to = lv / rv;
+        break;
+    case '^':
+        to = pow(lv, rv.data[0][0]);
+        break;
+    case 't':
+        to = lv.transposed();
+        break;
+    case 'd':
+        to = lv.det();
+        break;
+    case 'n':
+        to = lv.norm();
+        break;
+    }
 }
 
 void TMenu::PrintHelp() {

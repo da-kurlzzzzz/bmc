@@ -58,6 +58,8 @@ public:
     bool is_symmetric() const;
     bool is_triangular_upper() const;
     bool is_triangular_lower() const;
+
+    friend class TMenu;
 };
 
 #endif // MATRIX_H_INCLUDED
